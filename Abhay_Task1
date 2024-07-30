@@ -1,0 +1,23 @@
+//Task1
+#define PIN_STATE_HIGH 1
+#define PIN_STATE_LOW 0
+
+volatile int globalPinState = 0;
+
+int ISR_DIsampling() {
+    static int previousPinState = PIN_STATE_LOW;
+    static int consecutiveCount = 0;
+    int currentPinState = readPin(); 
+
+    if (currentPinState == previousPinState) {
+        consecutiveCount++;
+        if (consecutiveCount >= 10) {
+            globalPinState = currentPinState;
+            consecutiveCount = 0;
+        }
+    } else {
+        consecutiveCount = 0;
+    }
+    previousPinState = currentPinState;
+    return globalPinState;
+}

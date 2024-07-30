@@ -1,0 +1,37 @@
+//Task2
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
+
+QueueHandle_t xQueue;
+
+void vSenderTask(void *pvParameters) {
+    int dataToSend = 0;
+    while (1) {
+        dataToSend++;
+        xQueueSend(xQueue, &dataToSend, portMAX_DELAY);
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+}
+
+void vReceiverTask(void *pvParameters) {
+    int receivedData;
+    while (1) {
+        if (xQueueReceive(xQueue, &receivedData, portMAX_DELAY) == pdPASS) {
+            if (receivedData > 100) {
+                vTaskPrioritySet(NULL, tskIDLE_PRIORITY);
+            } else if (receivedData == 50) {
+                vTaskDelete(NULL);
+            }
+        }
+    }
+}
+
+int main() {
+    xQueue = xQueueCreate(10, sizeof(int));
+    xTaskCreate(vSenderTask, "Sender", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    xTaskCreate(vReceiverTask, "Receiver", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    vTaskStartScheduler();
+
+    for (;;);
+}

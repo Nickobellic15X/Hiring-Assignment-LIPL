@@ -69,7 +69,7 @@ At every evaluation, add a print statement to print out **dataID** and **DataVal
 
 
 ### Expected Output:
-- Code uploaded in GitHub (share the link via internshala chat).
+- Code uploaded in GitHub, same link for both problem statements, any other form of submission will not be accepted (google drive, direct file share, etc).(share the link using the submit assignment feature in Internshala).
 ### Evaluation Criteria:
 - Logic used
 -  Coding Standards
